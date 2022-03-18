@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        li {
+            display: flex;
+            justify-content: space-between;
+        }
+        li button {
+            width: 100px;
+        }
+    </style>
+</head>
+<body>
+    <ul>
+
+    </ul>
+    <form>
+        <input id="todo-input" type="text">
+        <input id="submit-button" type="submit" value="Enter Something">
+    </form>
+    <script>
+        const _todoText = document.getElementById("todo-input");
+        const _todoSubmitButton = document.getElementById("submit-button");
+        const _form = document.querySelector("form")
+        const _todoList = document.querySelector("ul");
+
+        let todos = JSON.parse(localStorage.getItem("todos")) || [];
+        displayTodo();
+
+        _form.onsubmit = (event) => {
+            event.preventDefault();
+            addTodo(_todoText.value);
+            _todoText.value = "";
+        }
+        function addTodo(value) {
+            todos.push(value);
+            window.localStorage.setItem("todos", JSON.stringify(todos));
+            displayTodo();
+        }
+        function displayTodo() {
+            _todoList.innerHTML = "";
+            todos.forEach((todo, index) => {
+                const li = document.createElement("li");
+                const text = document.createElement("span")
+                const deleteButton = document.createElement("button")
+                text.innerHTML = todo;
+                deleteButton.innerHTML = "Delete";
+                deleteButton.onclick = (event) => {
+                    event.preventDefault();
+                    deleteTodo(index);
+                }
+                li.appendChild(text);
+                li.appendChild(deleteButton);
+                _todoList.appendChild(li);
+            })
+        }
+        function deleteTodo(index) {
+            todos.splice(index, 1);
+            window.localStorage.setItem("todos", JSON.stringify(todos));
+            displayTodo();
+        }
+
+    </script>
+</body>
+</html>
