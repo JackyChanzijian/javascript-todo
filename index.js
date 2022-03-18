@@ -29,7 +29,7 @@ function refreshTodo() {
         const deleteButton = document.createElement("button");
         text.innerHTML = todo.text;
         doneButton.innerHTML = "✔"
-        deleteButton.innerHTML = "Delete";
+        deleteButton.innerHTML = "🗑";
         //Onclick event register
         doneButton.onclick = (event) => {
             event.preventDefault();
