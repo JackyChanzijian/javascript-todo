@@ -4,7 +4,7 @@ const _form = document.querySelector("form")
 const _todoList = document.querySelector("ul");
 
 let todos = JSON.parse(localStorage.getItem("todos")) || [];
-displayTodo();
+refreshTodo();
 
 _form.onsubmit = (event) => {
     event.preventDefault();
@@ -13,30 +13,53 @@ _form.onsubmit = (event) => {
     _todoText.value = "";
 }
 function addTodo(value) {
-    todos.push(value);
-    window.localStorage.setItem("todos", JSON.stringify(todos));
-    displayTodo();
+    todos.push({
+        text: value,
+        isDone: false
+    });
+    storeTodo();
+    refreshTodo();
 }
-function displayTodo() {
+function refreshTodo() {
     _todoList.innerHTML = "";
     todos.forEach((todo, index) => {
         const li = document.createElement("li");
         const text = document.createElement("span")
-        const deleteButton = document.createElement("button")
-        text.innerHTML = todo;
+        const doneButton = document.createElement("button");
+        const deleteButton = document.createElement("button");
+        text.innerHTML = todo.text;
+        doneButton.innerHTML = "✔"
         deleteButton.innerHTML = "Delete";
+        //Onclick event register
+        doneButton.onclick = (event) => {
+            event.preventDefault();
+            markAsDone(index);
+        }
         deleteButton.onclick = (event) => {
             event.preventDefault();
             deleteTodo(index);
         }
+        //Cross out text if is done
+        if (todo.isDone) {
+            text.style.textDecoration = "line-through";
+        }
+        //Appen all element to li
         li.appendChild(text);
+        li.appendChild(doneButton);
         li.appendChild(deleteButton);
         _todoList.appendChild(li);
     })
 }
 function deleteTodo(index) {
     todos.splice(index, 1);
-    window.localStorage.setItem("todos", JSON.stringify(todos));
-    displayTodo();
+    storeTodo();
+    refreshTodo();
 }
-
+function markAsDone(index) {
+    todos[index].isDone = !todos[index].isDone;
+    storeTodo();
+    refreshTodo();
+}
+function storeTodo() {
+    window.localStorage.setItem("todos", JSON.stringify(todos));
+}
