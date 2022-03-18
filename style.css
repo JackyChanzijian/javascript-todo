@@ -35,6 +35,7 @@ li button {
     border-width: 0;
     border-radius: var(--border-radius);
     height: 40px;
+    cursor: pointer;
 }
 form {
     position: fixed;
